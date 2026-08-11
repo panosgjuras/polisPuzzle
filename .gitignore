@@ -90,3 +90,10 @@ ITERS/
 # Local generated documentation
 docs/_build/
 site/
+
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+
+# Python package build metadata
+*.egg-info/
