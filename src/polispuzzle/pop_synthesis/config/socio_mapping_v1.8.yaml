@@ -1,0 +1,231 @@
+version: 1.8
+description: "Mapping between ELSTAT categories and PolisPuzzle agent attributes"
+
+columns:
+# ELSTAT mappings 
+  "Φύλο": gender
+  "ΦΥΛΟ": gender
+  "Ηλικία": age_group
+  "Ηλικιακή Ομάδα": age_group
+  "Ομάδες ηλικιών": age_group
+  "Επίπεδο Εκπαίδευσης": education
+  "Επίπεδο εκπαίδευσης": education
+  "Κατάσταση απασχόλησης": employment
+  "Ιδιοκτησία αυτοκινήτου": car_own
+  "Κατοχή αυτοκινήτου": car_own
+  "Νοικοκυριά κατά αριθμό αυτοκινήτων": car_count
+  "Γεωγραφικός Κωδικός": postcode
+  "Γεωγραφικός κωδικός": postcode
+  "Οικισμός": settlement
+  "Περιγραφή": area_name
+# SURVEY mappings
+  # Google Forms (Nea Ionia) and Microsoft Forms (Penteli).
+  # Strip leading/trailing whitespace from column names before applying.
+  "Φύλο:": gender
+  "Ηλικία:": age_group
+  "Ποιο είναι το επίπεδο εκπαίδευσης που έχετε ολοκληρώσει;": education
+  "Κύρια απασχόληση": employment
+  "Κύρια απασχόληση:": employment
+  "Πόσα οχήματα έχετε στην οικογένεια (νοικοκυριό) σας; [Συμβατικό αυτοκίνητο]": car_count_conventional
+  "Πόσα οχήματα έχετε στην οικογένεια (νοικοκυριό) σας; [Ηλεκτρικό αυτοκίνητο]": car_count_electric
+  "Συμβατικό αυτοκίνητο": car_count_conventional
+  "Ηλεκτρικό αυτοκίνητο": car_count_electric
+  # Processed surveys (Nafplio, Nea Smirni, Xylokastro)
+  "gender": gender
+  "age": age
+  "education": education
+  "employment": employment
+  "car_own": car_own
+
+
+gender:
+# ELSTAT mappings
+  "Άρρενες": "1: male"
+  "ΑΡΡΕΝΕΣ": "1: male"
+  "Άνδρες": "1: male"
+  "Θήλεις": "0: female"
+  "ΘΗΛΕΙΣ": "0: female"
+  "Γυναίκες": "0: female"
+# SURVEY mappings
+  "Άνδρας": "1: male"
+  "Γυναίκα": "0: female"
+  "Δεν απαντώ": null
+  # Processed surveys (Nafplio, Nea Smirni, Xylokastro)
+  "male": "1: male"
+  "female": "0: female"
+
+education:
+# ELSTAT mappings
+  "Διδακτορικό ή Μεταπτυχιακός τίτλος": "4: master or phd"
+  "Πτυχίο Ανωτάτων Σχολών": "3: bachelor"
+  "Πτυχίο Ανώτερης Τεχν.Επαγ. Εκπαίδευσης": "3: bachelor"
+
+  "Πτυχίο μεταδευτεροβάθμιας εκπαίδευσης (ΙΕΚ, Κολέγια κλπ.)": "2: high school"
+  "Απολυτήριο Μέσης Εκπαίδευσης": "2: high school"
+  "Απολυτήριο 3-ταξ Μέσης Εκπαίδευσης": "2: high school"
+  "Απολυτήριο Λυκείου (Γενικού, Επαγγελματικού, Εκκλησιαστικού κ.λπ. ή εξαταξίου Γυμνασίου)": "2: high school"
+  "Πτυχίο Επαγγελματικών Σχολών / Απολυτήριο τριτάξιου Γυμνασίου": "2: high school"
+
+  "Απολυτήριο Δημοτικού": "1: primary school"
+  "Μερικές τάξεις Δημοτικού / Δέν πήγε καθόλου σχολείο": "1: primary school"
+  "Εγκατέλειψε ή δε φοίτησε στο Δημοτικό": "1: primary school"
+
+  "Χωρίς απάντηση": null
+  "Μη κατατασσόμενοι (άτομα γεννηθέντα μετά την 1/1/2016)": null
+# SURVEY mappings
+  "Μεταπτυχιακές ή Διδακτορικές σπουδές": "4: master or phd"
+  "Τριτοβάθμια εκπαίδευση (δηλ. Πανεπιστήμιο, ΤΕΙ)": "3: bachelor"
+  "Δευτεροβάθμια εκπαίδευση (δηλ. Γυμνάσιο, Επαγγελματικό ή Γενικό Λύκειο, κλπ.)": "2: high school"
+  "Δευτεροβάθμια εκπαίδευση (δηλ. Λύκειο, Γυμνάσιο)": "2: high school"
+  "Πρωτοβάθμια εκπαίδευση (δηλ. Δημοτικό, Νηπιαγωγείο)": "1: primary school"
+  "Χωρίς εκπαίδευση": "1: primary school"
+  "Δεν απαντώ": null
+  # Processed surveys (Nafplio, Nea Smirni, Xylokastro)
+  "master or phd": "4: master or phd"
+  "bachelor": "3: bachelor"
+  "high school": "2: high school"
+  "primary school": "1: primary school"
+
+employment:
+# ELSTAT mappings
+  "Απασχολούμενοι": "4: active"
+  "Απασχο-λούμενοι": "4: active"
+  "Άνεργοι": "2: unemployed"
+  "Μη οικονομικά ενεργοί": "1: inactive"
+# SURVEY mappings
+  "Δημόσιος-Ιδιωτικός υπάλληλος": "4: active"
+  "Ελεύθερος επαγγελματίας-Επιχειρηματίας": "4: active"
+  "Διανομέας": "4: active"
+  "Εργάτης-Τεχνίτης": "4: active"
+  "Αγρότης-Κτηνοτρόφος": "4: active"
+  "Άνεργος/η": "2: unemployed"
+  "Άνεργη/ος": "2: unemployed"
+  "Φοιτητής/τρια": "3: student"
+  "Μαθήτης/τρια": "3: student"
+  "Μαθήτρια/ής – Φοιτήτρια/ής": "3: student"
+  "Συνταξιούχος": "1: inactive"
+  "Οικιακά": "1: inactive"
+  "Δεν απαντώ": null
+  # Processed surveys (Nafplio, Nea Smirni, Xylokastro)
+  "active": "4: active"
+  "student": "3: student"
+  "unemployed": "2: unemployed"
+  "inactive": "1: inactive"
+
+# ELSTAT table Γ13 reports households rather than individuals. When generating
+# agents, sample this category at household level and assign the same result to
+# every person belonging to that household.
+car_own:
+# ELSTAT mappings
+  "Χωρίς αυτοκίνητο": "0: no"
+  "Με αυτοκίνητο": "1: yes"
+  "1 αυτοκίνητο": "1: yes"
+  "2 αυτοκίνητα": "1: yes"
+  "3+ αυτοκίνητα": "1: yes"
+# SURVEY mappings
+  # Apply these values only to the conventional/electric car-count questions.
+  # car_own is yes when either household car count is greater than zero.
+  "Κανένα": "0: no"
+  "0": "0: no"
+  "0.0": "0: no"
+  "1": "1: yes"
+  "1.0": "1: yes"
+  "2": "1: yes"
+  "2.0": "1: yes"
+  "3 ή περισσότερα": "1: yes"
+  "3+": "1: yes"
+  # Processed surveys (Nafplio, Nea Smirni, Xylokastro)
+  "no": "0: no"
+  "yes": "1: yes"
+
+# Map household vehicle-count categories directly to numeric counts.
+# Open-ended categories such as 3+ use their known minimum value.
+car_count:
+    "Χωρίς αυτοκίνητο": 0
+    "1 αυτοκίνητο": 1
+    "2 αυτοκίνητα": 2
+    "3+ αυτοκίνητα": 3
+
+  # SURVEY mappings
+car_count_conventional:
+  "Κανένα": 0
+  "0": 0
+  "0.0": 0
+  "1": 1
+  "1.0": 1
+  "2": 2
+  "2.0": 2
+  "3 ή περισσότερα": 3
+  "3+": 3
+
+  # SURVEY mappings
+car_count_electric:
+  "Κανένα": 0
+  "0": 0
+  "0.0": 0
+  "1": 1
+  "1.0": 1
+  "2": 2
+  "2.0": 2
+  "3 ή περισσότερα": 3
+  "3+": 3
+
+
+elstat_age_groups:
+  - "0-4"
+  - "5-9"
+  - "10-14"
+  - "15-19"
+  - "20-24"
+  - "25-29"
+  - "30-34"
+  - "35-39"
+  - "40-44"
+  - "45-49"
+  - "50-54"
+  - "55-59"
+  - "60-64"
+  - "65-69"
+  - "70-74"
+  - "75+"
+
+# Bounds of non-ELSTAT age-group labels found in source datasets.
+age_groups:
+  # SURVEY mappings
+  "μικρότερος/η απο 18 ετών": [0, 17]
+  "18-30 ετών": [18, 30]
+  "31-40 ετών": [31, 40]
+  "41-50 ετών": [41, 50]
+  "51-65 ετών": [51, 65]
+  "μεγαλύτερος/η από 65 ετών": [66, 100]
+  "Άνω των 65 ετών": [66, 100]
+  "Δεν απαντώ": null
+
+# SURVEY mappings
+# Processed surveys contain exact ages rather than age-group labels. Convert
+# whole-year values (including values such as 53.0) to the same five-year age
+# groups used by ELSTAT. The last group is open-ended; maximum is only a data
+# validation limit.
+processed_age:
+  source_column: age
+  target_column: age_group
+  coerce_numeric: true
+  integer_only: true
+  minimum: 0
+  maximum: 100
+  missing: null
+
+# Harmonization precedence:
+# 1. A usable exact age is converted directly to an ELSTAT group.
+# 2. A non-ELSTAT age_group is converted using its configured bounds. When a
+#    source group overlaps several ELSTAT groups, assignment is proportional
+#    to the number of whole ages in each overlap. Set a seed in code so the
+#    result is reproducible.
+# 3. An existing ELSTAT age_group is retained unchanged.
+age_harmonization:
+  exact_age_column: age
+  age_group_column: age_group
+  target_column: age_group
+  source_group_bounds: age_groups
+  target_groups: elstat_age_groups
+  overlapping_group_method: uniform_integer_age
