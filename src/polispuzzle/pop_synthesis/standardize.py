@@ -64,21 +64,36 @@ def add_city_pid(df, city = 'Athens'):
     result = result.set_index("pid")
     return result
 
-def convert_age_group(value, age_groups, age_bins, source_bounds, rng):
-    """
-    It is an age group converter. This function is required for case B1,
-    SEE NEXT FUNCTION.  
-    """
-    
-    # ELSTAT_AGE_BINS = list(range(0, 76, 5)) + [np.inf] # This is the bins ELSTAT that is fully respected here
-    
-    if pd.isna(value): return None
 
-    if value in age_groups: return value
+ELSTAT_AGE_BINS = list(range(0, 76, 5)) + [np.inf]
 
-    bounds = source_bounds.get(value)
+def convert_age_group(
+    value,
+    age_groups,
+    age_bins,
+    source_bounds,
+    rng,
+):
+    """Convert one non-ELSTAT age group to an ELSTAT age group."""
 
-    if bounds is None: return None
+    if pd.isna(value):
+        return pd.NA
+
+    normalized_value = normalize_text(value)
+
+    # Preserve an existing ELSTAT group.
+    elstat_lookup = {
+        normalize_text(group): group
+        for group in age_groups
+    }
+
+    if normalized_value in elstat_lookup:
+        return elstat_lookup[normalized_value]
+
+    bounds = source_bounds.get(normalized_value)
+
+    if bounds is None:
+        return pd.NA
 
     lower, upper = bounds
     upper = 100 if upper is None else upper
@@ -94,19 +109,14 @@ def convert_age_group(value, age_groups, age_bins, source_bounds, rng):
 
 def harmonize_age(df, mapping, random_seed=42):
     """
-    This function harmonize the age data according to the ELSTAT format.
-    
-    It uses age groups and not ages.
-    
-    There 3 + 1 cases: 
-        (A) exact age is available
-        (B1) age group is known and written in ELSTAT format
-        (B2) age group is know but not written in ELSTAT format
-        (C) there are no data about age in any column
+    Harmonize age information using ELSTAT age groups.
 
+    Cases:
+        A:  Exact age is available.
+        B1: age_group already follows ELSTAT.
+        B2: age_group uses different group boundaries.
+        C:  No age information is available.
     """
-    
-    ELSTAT_AGE_BINS = list(range(0, 76, 5)) + [np.inf] # This is the bins ELSTAT that is fully respected here
     elstat_age_groups = mapping["elstat_age_groups"]
 
     has_age = "age" in df.columns
@@ -117,7 +127,6 @@ def harmonize_age(df, mapping, random_seed=42):
         result = df.copy()
         ages = pd.to_numeric(result["age"], errors="coerce")
 
-        # Reject fractional, negative, or unrealistic ages.
         valid = (
             ages.eq(ages.round())
             & ages.between(0, 100)
@@ -129,31 +138,60 @@ def harmonize_age(df, mapping, random_seed=42):
             labels=elstat_age_groups,
             right=False,
         )
-        
+
         return result
 
-    # Case B1 and B2: an age-group column is available.
     if has_group:
-        # CASE B1, it follows the ELSTAT format
-        if df["age_group"].dropna().isin(elstat_age_groups).all():
+        normalized_elstat_groups = {
+            normalize_text(group)
+            for group in elstat_age_groups
+        }
+
+        normalized_values = (
+            df["age_group"]
+            .dropna()
+            .map(normalize_text)
+        )
+
+        # Case B1: values already follow ELSTAT.
+        if normalized_values.isin(normalized_elstat_groups).all():
             return df
 
-        # Case B2: it does not follow the ELSTAT format and requires conversion
-        else:
-            result = df.copy()
-            result["age_group"] = result["age_group"].map(
+        # Case B2: convert source age groups.
+        result = df.copy()
+
+        # Create the generator once, not once per row.
+        rng = np.random.default_rng(random_seed)
+
+        # Normalize the YAML keys once.
+        source_bounds = {
+            normalize_text(key): bounds
+            for key, bounds in mapping["age_groups"].items()
+        }
+
+        # object conversion guarantees row-by-row mapping when the
+        # original Series has categorical dtype.
+        result["age_group"] = (
+            result["age_group"]
+            .astype("object")
+            .map(
                 lambda value: convert_age_group(
                     value=value,
-                    age_groups = elstat_age_groups,
-                    age_bins = ELSTAT_AGE_BINS,
-                    source_bounds = mapping["age_groups"],
-                    rng = np.random.default_rng(random_seed),
+                    age_groups=elstat_age_groups,
+                    age_bins=ELSTAT_AGE_BINS,
+                    source_bounds=source_bounds,
+                    rng=rng,
                 )
             )
+        )
 
         return result
 
-    raise KeyError("Data about age is not present in the dataset.")
+    # Case C
+    raise KeyError(
+        "Neither 'age' nor 'age_group' is present in the dataset."
+    )
+
 
 def add_car_count(df, mapping):
     """
