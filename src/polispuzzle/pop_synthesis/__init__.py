@@ -11,6 +11,8 @@ from .standardize import (
 #    normalize_text,
 )
 
+from .socioPooling import (pool_pid, write_socio_to_pool)
+
 __all__ = [
     "load_socio_mapping",
 #    "normalize_text",
@@ -20,4 +22,6 @@ __all__ = [
 #    "convert_age_group",
     "harmonize_age",
     "add_car_count",
+    "pool_pid",
+    "write_socio_to_pool"
 ]
