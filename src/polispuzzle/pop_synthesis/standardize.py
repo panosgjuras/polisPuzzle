@@ -64,18 +64,17 @@ def add_city_pid(df, city = 'Athens'):
     result = result.set_index("pid")
     return result
 
-def convert_age_group(value, source_bounds, rng):
+def convert_age_group(value, age_groups, age_bins, source_bounds, rng):
     """
     It is an age group converter. This function is required for case B1,
     SEE NEXT FUNCTION.  
     """
     
-    ELSTAT_AGE_BINS = list(range(0, 76, 5)) + [np.inf] # This is the bins ELSTAT that is fully respected here
-    elstat_age_groups = mapping["elstat_age_groups"]
+    # ELSTAT_AGE_BINS = list(range(0, 76, 5)) + [np.inf] # This is the bins ELSTAT that is fully respected here
     
     if pd.isna(value): return None
 
-    if value in elstat_age_groups: return value
+    if value in age_groups: return value
 
     bounds = source_bounds.get(value)
 
@@ -88,8 +87,8 @@ def convert_age_group(value, source_bounds, rng):
 
     return pd.cut(
         [sampled_age],
-        bins=ELSTAT_AGE_BINS,
-        labels=elstat_age_groups,
+        bins=age_bins,
+        labels=age_groups,
         right=False,
     )[0]
 
@@ -145,6 +144,8 @@ def harmonize_age(df, mapping, random_seed=42):
             result["age_group"] = result["age_group"].map(
                 lambda value: convert_age_group(
                     value=value,
+                    age_groups = elstat_age_groups,
+                    age_bins = ELSTAT_AGE_BINS,
                     source_bounds = mapping["age_groups"],
                     rng = np.random.default_rng(random_seed),
                 )
@@ -154,7 +155,7 @@ def harmonize_age(df, mapping, random_seed=42):
 
     raise KeyError("Data about age is not present in the dataset.")
 
-def add_car_count(df):
+def add_car_count(df, mapping):
     """
     It adds data about the number of cars in each household. But, the data are assigned to one person.
     If there is not indication about the number of cars, but car ownership is known:
@@ -184,47 +185,3 @@ def add_car_count(df):
         return result
     
     raise KeyError("Data about car ownership is not present in the dataset.")
-        
-
-# %%
-
-import pandas as pd
-import os
-
-socio_tags = ['city', 'gender', 'age_group', 'education', 'employment',
-               'car_count']
-
-
-# Step 1. Import the dataset
-path = "/Users/panosgtzouras/Desktop/datasets/csv"
-city = 'Penteli'
-
-df = pd.read_csv(os.path.join(path, "sump_surveys", f"raw_datasets/surveyDataset_raw_{city}.csv"))
-df = normalize_dataframe_text(df)
-df = add_city_pid(df, city) # add pid and city, they are the main identifiers
-
-# Save the dataset v1 to not lose pid and city
-df.to_csv(os.path.join(path, "sump_surveys", f"raw_datasets/surveyDataset_raw_{city}_v1.csv")) # Update the link
-
-# Import the YAML file with the dictionaries, for renaming and replacing
-mapping = load_socio_mapping()
-
-# Rename the columns based on the standard format
-df = df.rename(columns=mapping["columns"])
-
-# 2. Standardize categorical values.
-for c in ["gender", "education", "employment"]:
-    if c in df.columns:
-        df[c] = map_values(df[c], mapping[c])
-
-# Harmonize the age based on ELSTAT age groups
-df = harmonize_age(df, mapping)
-
-df = add_car_count(df)
-
-socio = df[socio_tags]
-
-df2 = df[["car_count", "car_count_conventional", "car_count_electric"]]
-
-
-

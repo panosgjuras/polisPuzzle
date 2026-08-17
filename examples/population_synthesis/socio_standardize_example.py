@@ -3,7 +3,7 @@ import os
 import polispuzzle.pop_synthesis as psynth
 # %% Step 1: Import the dataset
 path = "/Users/panosgtzouras/Desktop/datasets/csv"
-city = 'Penteli'
+city = 'Nea_Ionia'
 df = pd.read_csv(os.path.join(path, "sump_surveys", f"raw_datasets/surveyDataset_raw_{city}.csv"))
 
 # %% Step 2: Fix greek text and add pid and city
@@ -24,11 +24,11 @@ for c in ["gender", "education", "employment"]:
 
 # %% Step 5: Harmonize the age based on ELSTAT age groups and add car count data
 df = psynth.harmonize_age(df, mapping)
-df = psynth.add_car_count(df)
+df = psynth.add_car_count(df, mapping)
 
 # %% Step 6. Create the socio-demo dataframe
 socio_tags = ['city', 'gender', 'age_group', 'education', 'employment',
                'car_count']
 socio = df[socio_tags]
-
+socio.to_csv(os.path.join(path, "sump_surveys", f"processed_datasets/socio_{city}_v1.csv"))
 # %% Step 7. Inspect the results
