@@ -2,7 +2,7 @@
 Python toolkit for generating disaggregate travel-demand and transport-supply scenarios for MATSim, designed for cities across Greece.
 
 <p align="center">
-  <img src="logos/polisPuzzle-logo_v2.png" alt="#polisPuzzle logo" width="250">
+  <img src="logos/polisPuzzle-logo_v3.png" alt="#polisPuzzle logo" width="250">
 </p>
 
 ## Links for socio-demographic data
