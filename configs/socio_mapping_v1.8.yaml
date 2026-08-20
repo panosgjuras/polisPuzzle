@@ -61,25 +61,33 @@ gender:
 
 education:
 # ELSTAT mappings
-  "Διδακτορικό ή Μεταπτυχιακός τίτλος": "4: master or phd"
-  "Πτυχίο Ανωτάτων Σχολών": "3: bachelor"
-  "Πτυχίο Ανώτερης Τεχν.Επαγ. Εκπαίδευσης": "3: bachelor"
+  # The first G04 category combines all tertiary qualifications, so it cannot
+  # distinguish bachelor from master/PhD at settlement level.
+  "Διδακτορικό/Μεταπτυχιακό/Πανεπιστήμιο/ΑΤΕΙ": "3: university"
+  "Διδακτορικό ή Μεταπτυχιακός τίτλος": "3: university"
+  "Πτυχίο Ανωτάτων Σχολών": "3: university"
+  "Πτυχίο Ανώτερης Τεχν.Επαγ. Εκπαίδευσης": "3: university"
 
+  "Μεταδευτεροβάθμια (ΙΕΚ, Κολέγια)": "2: high school"
   "Πτυχίο μεταδευτεροβάθμιας εκπαίδευσης (ΙΕΚ, Κολέγια κλπ.)": "2: high school"
+  "Απολυτήριο Λυκείου": "2: high school"
   "Απολυτήριο Μέσης Εκπαίδευσης": "2: high school"
   "Απολυτήριο 3-ταξ Μέσης Εκπαίδευσης": "2: high school"
   "Απολυτήριο Λυκείου (Γενικού, Επαγγελματικού, Εκκλησιαστικού κ.λπ. ή εξαταξίου Γυμνασίου)": "2: high school"
+  "Πτυχίο Επαγγελματικής Σχολής / Γυμνάσιο": "2: high school"
   "Πτυχίο Επαγγελματικών Σχολών / Απολυτήριο τριτάξιου Γυμνασίου": "2: high school"
 
   "Απολυτήριο Δημοτικού": "1: primary school"
+  "Χωρίς απολυτήριο Δημοτικού (γνώση γραφής-ανάγνωσης)": "1: primary school"
   "Μερικές τάξεις Δημοτικού / Δέν πήγε καθόλου σχολείο": "1: primary school"
   "Εγκατέλειψε ή δε φοίτησε στο Δημοτικό": "1: primary school"
 
   "Χωρίς απάντηση": null
-  "Μη κατατασσόμενοι (άτομα γεννηθέντα μετά την 1/1/2016)": null
+  "Μη κατατασσόμενοι (γεννηθέντες μετά 1/1/2016)": "1: primary school"
+  "Μη κατατασσόμενοι (άτομα γεννηθέντα μετά την 1/1/2016)": "1: primary school"
 # SURVEY mappings
-  "Μεταπτυχιακές ή Διδακτορικές σπουδές": "4: master or phd"
-  "Τριτοβάθμια εκπαίδευση (δηλ. Πανεπιστήμιο, ΤΕΙ)": "3: bachelor"
+  "Μεταπτυχιακές ή Διδακτορικές σπουδές": "3: university"
+  "Τριτοβάθμια εκπαίδευση (δηλ. Πανεπιστήμιο, ΤΕΙ)": "3: university"
   "Δευτεροβάθμια εκπαίδευση (δηλ. Γυμνάσιο, Επαγγελματικό ή Γενικό Λύκειο, κλπ.)": "2: high school"
   "Δευτεροβάθμια εκπαίδευση (δηλ. Λύκειο, Γυμνάσιο)": "2: high school"
   "Δευτεροβάθμια εκπαίδευση (δηλ. Γυμνάνσιο, Επαγγελματικό ή Γενικό Λύκειο, κλπ.)": "2: high school"
@@ -87,8 +95,8 @@ education:
   "Χωρίς εκπαίδευση": "1: primary school"
   "Δεν απαντώ": null
   # Processed surveys (Nafplio, Nea Smirni, Xylokastro)
-  "master or phd": "4: master or phd"
-  "bachelor": "3: bachelor"
+  "master or phd": "3: university"
+  "bachelor": "3: university"
   "high school": "2: high school"
   "primary school": "1: primary school"
 
@@ -97,6 +105,9 @@ employment:
   "Απασχολούμενοι": "4: active"
   "Απασχο-λούμενοι": "4: active"
   "Άνεργοι": "2: unemployed"
+  "Μαθητές-σπουδαστές": "3: student"
+  "Συνταξιούχοι": "1: inactive"
+  "Λοιποί": "1: inactive"
   "Μη οικονομικά ενεργοί": "1: inactive"
 # SURVEY mappings
   "Δημόσιος-Ιδιωτικός υπάλληλος": "4: active"
@@ -195,6 +206,27 @@ elstat_age_groups:
   - "65-69"
   - "70-74"
   - "75+"
+
+# Relates the detailed G01 groups to the broader municipality groups used by
+# B01/B02 seeds. This is seed metadata, not a standardization mapping: the final
+# matrices retain the detailed G01 age groups.
+coarse_age_groups:
+  "0-4": "0-14"
+  "5-9": "0-14"
+  "10-14": "0-14"
+  "15-19": "15-29"
+  "20-24": "15-29"
+  "25-29": "15-29"
+  "30-34": "30-44"
+  "35-39": "30-44"
+  "40-44": "30-44"
+  "45-49": "45-59"
+  "50-54": "45-59"
+  "55-59": "45-59"
+  "60-64": "60-74"
+  "65-69": "60-74"
+  "70-74": "60-74"
+  "75+": "75+"
 
 # Bounds of non-ELSTAT age-group labels found in source datasets.
 age_groups:
