@@ -99,7 +99,7 @@ education_employment = ipf(
 #         for level, percentage in levels.items():
 #             print(f"    {level}: {percentage:.12f}")
 
-# %% Step 7. Run 4-dimmensional IPF and generate agents
+# %% Step 7. Run 4-dimmensional IPF and create general matrix
 
 joint_distribution = ipf(
     ("gender", "age_group", "education", "employment"),
@@ -121,13 +121,14 @@ joint_distribution = ipf(
     constraints="all",
 )
 
+# %% Step 8. Generate agents
 agents = generate_agents_from_joint_distribution(
     joint_distribution,
-    population_percentage=1,
+    population_percentage = 10,
     random_seed=42,
 )
 
-# %% Step 8. Add number of cars per household in each agent
+# %% Step 9. Add number of cars per household in each agent
 
 agents = assign_car_count_to_agents(
     agents,
