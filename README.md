@@ -31,7 +31,7 @@ Python toolkit for generating disaggregate travel-demand and transport-supply sc
 
 - When a settlement name is not unique, we use its ELSTAT geographic code for unambiguous identification.
 
-- We standardize category labels before combining matrices or running multidimensional Iterative Proportional Fitting (IPF). The categorization is defined in the configuration file `socio_mapping_v1.8.yaml`.
+- We standardize category labels before combining matrices or running multidimensional Iterative Proportional Fitting (IPF). The categorization is defined in the configuration file [socio_mapping_v1.8.yaml](https://github.com/panosgjuras/polisPuzzle/blob/main/configs/socio_mapping_v1.8.yaml).
 
 - We assume that the municipality’s age × education patterns reasonably approximate the patterns within each settlement belonging to that municipality.
 
