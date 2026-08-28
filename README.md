@@ -23,7 +23,7 @@ Python toolkit for generating disaggregate travel-demand and transport-supply sc
 
  8. Module 8. [matsim](): responsible for converting those objects into MATSim files. This prevents MATSim-specific XML details from spreading through every module.
 
-## Assumptions of [pop_synthesis](https://github.com/panosgjuras/polisPuzzle/tree/main/src/polispuzzle/pop_synthesis) methodology
+### Assumptions of [pop_synthesis](https://github.com/panosgjuras/polisPuzzle/tree/main/src/polispuzzle/pop_synthesis) methodology
 
 - We use the 2021 ELSTAT Population and Housing Census as the reference population.
 
