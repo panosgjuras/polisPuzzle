@@ -41,6 +41,13 @@ columns:
   "education": education
   "employment": employment
   "car_own": car_own
+  "M_Code": pid
+  "M_Gender": gender
+  "M_Age": age
+  "M_Education": education
+  "M_Occupation": employment
+  "Car": car_own
+  "Car_Count": car_count
 
 
 gender:
@@ -58,6 +65,7 @@ gender:
   # Processed surveys (Nafplio, Nea Smirni, Xylokastro)
   "male": "1: male"
   "female": "0: female"
+  "Άλλο": null
 
 education:
 # ELSTAT mappings
@@ -99,6 +107,15 @@ education:
   "bachelor": "3: university"
   "high school": "2: high school"
   "primary school": "1: primary school"
+  "Δεν τελείωσε Δημοτικό": "1: primary school"
+  "Απόφοιτος Δημοτικού": "1: primary school"
+  "Απόφοιτος Γυμνασίου (3τάξιου)": "2: high school"
+  "Απόφ. Λυκείου (ή 6τάξιου Γυμνασίου)": "2: high school"
+  "Απόφ. Μεταδ/βάθμιας Εκπαίδευσης (ΙΕΚ)": "2: high school"
+  "Απόφ. Ανώτερης Εκπαίδευσης (ΤΕΙ/ΚΑΤΕΕ)": "3: university"
+  "Πτυχιούχοι ΑΤΕΙ, ΑΣΠΑΙΤΕ και ισότιμων σχολών": "3: university"
+  "Απόφοιτος Ανώτατης Εκπαίδευσης (ΑΕΙ/Μaster/PhD)": "3: university"
+  "Εν ενεργεία Μαθητής/Φοιτητής": "3: student"
 
 employment:
 # ELSTAT mappings
@@ -129,6 +146,14 @@ employment:
   "student": "3: student"
   "unemployed": "2: unemployed"
   "inactive": "1: inactive"
+  "Eργοδότης": "4: active"
+  "Αυτοαπασχολούμενος": "4: active"
+  "Μισθωτός": "4: active"
+  "Άνεργος (ζητάει εργασία)": "2: unemployed"
+  "Μαθητής / φοιτητής": "3: student"
+  "Εισοδηματίας": "1: inactive"
+  "Στρατευμένος": "1: inactive"
+  "Άλλο": "1: inactive"
 
 # ELSTAT table Γ13 reports households rather than individuals. When generating
 # agents, sample this category at household level and assign the same result to
@@ -155,6 +180,8 @@ car_own:
   # Processed surveys (Nafplio, Nea Smirni, Xylokastro)
   "no": "0: no"
   "yes": "1: yes"
+  0: "0: no"
+  1: "1: yes"
 
 # Map household vehicle-count categories directly to numeric counts.
 # Open-ended categories such as 3+ use their known minimum value.
@@ -163,6 +190,14 @@ car_count:
     "1 αυτοκίνητο": 1
     "2 αυτοκίνητα": 2
     "3+ αυτοκίνητα": 3
+    0: 0
+    1: 1
+    2: 2
+    3: 3
+    4: 4
+    5: 5
+    6: 6
+    7: 7
 
   # SURVEY mappings
 car_count_conventional:

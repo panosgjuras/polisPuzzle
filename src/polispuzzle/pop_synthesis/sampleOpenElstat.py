@@ -255,13 +255,20 @@ def get_settlement_demographics(
         and carry settlement metadata in ``DataFrame.attrs``.
     """
     gender_age_book = _download_xlsx(gender_age_url)
-    g01_rows = [
+    all_g01_rows = [
         row for row in _rows(gender_age_book, "Γ01")
-        if row[0] == SETTLEMENT_LEVEL
+        if row[0] is not None and row[1] is not None
     ]
+    g01_rows = [row for row in all_g01_rows if row[0] == SETTLEMENT_LEVEL]
     settlement_row = _find_settlement(g01_rows, settlement)
     settlement_code = _code(settlement_row[1])
     municipality_code = settlement_code[:7]
+    municipal_unit_code = settlement_code[:9]
+    names_by_level_and_code = {
+        (row[0], _code(row[1])): str(row[2]).strip()
+        for row in all_g01_rows
+        if row[0] in {MUNICIPALITY_LEVEL, MUNICIPAL_UNIT_LEVEL}
+    }
 
     gender_age = build_probability_matrix(
         settlement_row,
@@ -290,6 +297,13 @@ def get_settlement_demographics(
         "settlement_code": settlement_code,
         "settlement_name": _clean_name(settlement_row[2]),
         "municipality_code": municipality_code,
+        "municipality_name": names_by_level_and_code.get(
+            (MUNICIPALITY_LEVEL, municipality_code)
+        ),
+        "municipal_unit_code": municipal_unit_code,
+        "municipal_unit_name": names_by_level_and_code.get(
+            (MUNICIPAL_UNIT_LEVEL, municipal_unit_code)
+        ),
         "settlement_population": int(settlement_row[3]),
     }
     gender_age.attrs.update(metadata)
@@ -635,7 +649,8 @@ def generate_agents_from_joint_distribution(
     ``population_percentage`` is on the 0--100 scale. Population is read from
     table metadata unless supplied explicitly. Sampling is reproducible with
     ``random_seed``. The returned DataFrame is indexed by ``pid`` and contains
-    city, gender, age group, education and employment.
+    home, gender, age group, education and employment. Home is formatted as
+    ``settlement | municipal unit | municipality``.
     """
     required = ["gender", "age_group", "education", "employment", "probability"]
     missing = set(required) - set(joint_distribution.columns)
@@ -666,14 +681,18 @@ def generate_agents_from_joint_distribution(
         p=probabilities,
     )
     agents = joint_distribution.iloc[sampled_positions][required[:-1]].reset_index(drop=True)
-    agents.insert(
-        0,
-        "city",
-        joint_distribution.attrs.get("settlement_name", "unknown"),
+    home = " | ".join(
+        str(joint_distribution.attrs.get(name) or "unknown")
+        for name in ("settlement_name", "municipal_unit_name", "municipality_name")
     )
+    agents.insert(0, "home", home)
     agents.index = pd.RangeIndex(1, number_of_agents + 1, name="pid")
     agents.attrs.update(
         settlement_code=joint_distribution.attrs.get("settlement_code"),
+        municipal_unit_code=joint_distribution.attrs.get("municipal_unit_code"),
+        municipal_unit_name=joint_distribution.attrs.get("municipal_unit_name"),
+        municipality_code=joint_distribution.attrs.get("municipality_code"),
+        municipality_name=joint_distribution.attrs.get("municipality_name"),
         settlement_population=population,
         population_percentage=population_percentage,
         random_seed=random_seed,

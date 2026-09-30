@@ -1,5 +1,5 @@
 """PolisPuzzle transport modelling toolkit."""
 
-from . import pop_synthesis, road_net
+from . import plan_assign, pop_synthesis, road_net
 
-__all__ = ["pop_synthesis", "road_net"]
+__all__ = ["plan_assign", "pop_synthesis", "road_net"]

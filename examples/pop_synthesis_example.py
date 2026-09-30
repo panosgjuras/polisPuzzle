@@ -14,7 +14,7 @@ from polispuzzle.pop_synthesis import (
 settlements = list_elstat_settlements()
 print(settlements.head())
 
-settl = "Ναύπλιον"
+settl = "Παπάγος"
 code_set = "1110101010101"
 
 # Using an exact settlement name:
@@ -124,7 +124,7 @@ joint_distribution = ipf(
 # %% Step 8. Generate agents
 agents = generate_agents_from_joint_distribution(
     joint_distribution,
-    population_percentage = 10,
+    population_percentage = 0.01,
     random_seed=42,
 )
 
